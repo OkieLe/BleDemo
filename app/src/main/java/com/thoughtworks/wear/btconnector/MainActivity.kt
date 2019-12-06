@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import com.thoughtworks.wear.btconnector.bt.GattServerManager
 import com.thoughtworks.wear.btconnector.utils.BTConstants
+import com.thoughtworks.wear.btconnector.utils.RIGHT
 import io.github.boopited.droidbt.SlaveManager
 import io.github.boopited.droidbt.common.BluetoothUtils
 import io.github.boopited.droidbt.common.BluetoothUtils.REQUEST_ENABLE_BT
@@ -42,13 +43,13 @@ class MainActivity : WearableActivity() {
     }
 
     private fun makeDeviceVisible() {
-        slaveManager = SlaveManager(this, BTConstants.SERVICE_CHAT)
+        slaveManager = SlaveManager(this, BTConstants.SERVICE_GESTURE)
         slaveManager?.start()
         gattServer = GattServerManager(this)
         gattServer?.start()
         findViewById<View>(R.id.gesture_detector).setOnClickListener {
             val data = Bundle().apply {
-                putInt(BTConstants.EXTRA_DATA, 3)
+                putInt(BTConstants.EXTRA_DATA, RIGHT)
                 putLong(BTConstants.EXTRA_TIME_STAMP, System.currentTimeMillis())
             }
             gattServer?.notifyGesture(BTConstants.CHARACTERISTIC_GESTURE, data)
