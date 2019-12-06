@@ -4,7 +4,8 @@ import android.bluetooth.*
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.thoughtworks.wear.btconnector.BTConstants
+import com.thoughtworks.wear.btconnector.utils.BTConstants
+import com.thoughtworks.wear.btconnector.utils.BTConstants.unwrapMessage
 import io.github.boopited.droidbt.common.BaseManager
 import io.github.boopited.droidbt.gatt.GattClient
 
@@ -16,6 +17,7 @@ class GattClientManager(
     private var bluetoothGattClients: MutableSet<GattClient> = mutableSetOf()
 
     override fun onGattConnected(gatt: BluetoothGatt) {
+        Log.i(TAG, "Connected to GATT server.")
         val intentAction: String = BTConstants.ACTION_GATT_CONNECTED
         broadcastUpdate(intentAction)
     }
@@ -28,10 +30,16 @@ class GattClientManager(
 
     override fun onServiceDiscovered(gatt: BluetoothGatt) {
         broadcastUpdate(BTConstants.ACTION_GATT_SERVICES_DISCOVERED)
+        bluetoothGattClients.find { it.sameAs(gatt) }
+            ?.setCharacteristicNotification(
+                gatt.getService(BTConstants.SERVICE_CHAT)
+                    .getCharacteristic(BTConstants.CHARACTERISTIC_GESTURE),
+                BTConstants.CONTENT_NOTIFY, true)
     }
 
     override fun onDataAvailable(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
         broadcastUpdate(BTConstants.ACTION_DATA_AVAILABLE, characteristic)
+        Log.i(TAG, unwrapMessage(characteristic.value).toString())
     }
 
     private fun broadcastUpdate(action: String) {

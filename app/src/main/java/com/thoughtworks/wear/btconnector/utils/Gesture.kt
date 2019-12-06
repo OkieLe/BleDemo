@@ -1,4 +1,4 @@
-package com.thoughtworks.wear.btconnector
+package com.thoughtworks.wear.btconnector.utils
 
 import androidx.annotation.IntDef
 
@@ -9,11 +9,18 @@ const val RIGHT = 3
 const val TOP = 4
 const val BOTTOM = 5
 
-@IntDef(UNKNOWN, CONFIRM, LEFT, RIGHT, TOP, BOTTOM)
+@IntDef(
+    UNKNOWN,
+    CONFIRM,
+    LEFT,
+    RIGHT,
+    TOP,
+    BOTTOM
+)
 @Retention(AnnotationRetention.SOURCE)
 annotation class GestureType
 
 data class Gesture(
     @GestureType val type: Int,
-    val date: Long = System.currentTimeMillis() / 1000
+    val date: Long = System.currentTimeMillis()
 )

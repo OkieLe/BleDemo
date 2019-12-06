@@ -1,4 +1,4 @@
-package com.thoughtworks.wear.btconnector
+package com.thoughtworks.wear.btconnector.utils
 
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattDescriptor
@@ -42,7 +42,11 @@ object BTConstants {
 
     fun wrapMessage(gesture: Gesture): ByteArray {
         return byteArrayOf(gesture.type.toByte())
-            .plus(longToUInt32ByteArray(gesture.date / 1000))
+            .plus(
+                longToUInt32ByteArray(
+                    gesture.date / 1000
+                )
+            )
     }
 
     private fun longToUInt32ByteArray(value: Long): ByteArray {
@@ -52,5 +56,21 @@ object BTConstants {
         bytes[2] = (value shr 16 and 0xFF).toByte()
         bytes[3] = (value shr 24 and 0xFF).toByte()
         return bytes
+    }
+
+    @ExperimentalUnsignedTypes
+    fun unwrapMessage(value: ByteArray): Gesture {
+        val type = value[0].toInt()
+        val time = uint32ByteArrayToLong(value.copyOfRange(1, 5))
+        return Gesture(type, time)
+    }
+
+    @ExperimentalUnsignedTypes
+    private fun uint32ByteArrayToLong(value: ByteArray): Long {
+        if (value.size != 4) throw IllegalArgumentException("Wrong size byte array")
+        return ((value[3].toUInt() and 0xFFU) shl 8 or
+                (value[2].toUInt() and 0xFFU) shl 8 or
+                (value[1].toUInt() and 0xFFU) shl 8 or
+                (value[0].toUInt() and 0xFFU)).toLong()
     }
 }

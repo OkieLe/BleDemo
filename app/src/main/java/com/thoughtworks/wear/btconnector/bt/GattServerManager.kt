@@ -3,11 +3,11 @@ package com.thoughtworks.wear.btconnector.bt
 import android.content.Context
 import android.util.Log
 import android.os.Bundle
-import com.thoughtworks.wear.btconnector.BTConstants
-import com.thoughtworks.wear.btconnector.BTConstants.createChatService
-import com.thoughtworks.wear.btconnector.BTConstants.wrapMessage
-import com.thoughtworks.wear.btconnector.Gesture
-import com.thoughtworks.wear.btconnector.UNKNOWN
+import com.thoughtworks.wear.btconnector.utils.BTConstants
+import com.thoughtworks.wear.btconnector.utils.BTConstants.createChatService
+import com.thoughtworks.wear.btconnector.utils.BTConstants.wrapMessage
+import com.thoughtworks.wear.btconnector.utils.Gesture
+import com.thoughtworks.wear.btconnector.utils.UNKNOWN
 import io.github.boopited.droidbt.common.BaseManager
 import io.github.boopited.droidbt.gatt.GattServer
 import java.util.*
@@ -75,7 +75,8 @@ class GattServerManager(context: Context): BaseManager(context), GattServer.Gatt
      */
     fun notifyGesture(uuid: UUID, extra: Bundle?) {
         Log.i(TAG, "Sending update to subscribers")
-        bluetoothGattServer.notifyDevices(BTConstants.SERVICE_CHAT, uuid,
+        bluetoothGattServer.notifyDevices(
+            BTConstants.SERVICE_CHAT, uuid,
             wrapNotificationData(uuid, extra))
     }
 
@@ -84,7 +85,12 @@ class GattServerManager(context: Context): BaseManager(context), GattServer.Gatt
             BTConstants.CHARACTERISTIC_GESTURE -> {
                 val time = extra?.getLong(BTConstants.EXTRA_TIME_STAMP) ?: System.currentTimeMillis()
                 val data = extra?.getInt(BTConstants.EXTRA_DATA) ?: UNKNOWN
-                wrapMessage(Gesture(data, time))
+                wrapMessage(
+                    Gesture(
+                        data,
+                        time
+                    )
+                )
             }
             else -> ByteArray(0)
         }

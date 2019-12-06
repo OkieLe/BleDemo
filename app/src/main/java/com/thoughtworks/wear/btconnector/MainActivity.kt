@@ -8,6 +8,7 @@ import android.support.wearable.activity.WearableActivity
 import android.view.View
 import android.widget.Toast
 import com.thoughtworks.wear.btconnector.bt.GattServerManager
+import com.thoughtworks.wear.btconnector.utils.BTConstants
 import io.github.boopited.droidbt.SlaveManager
 import io.github.boopited.droidbt.common.BluetoothUtils
 import io.github.boopited.droidbt.common.BluetoothUtils.REQUEST_ENABLE_BT
