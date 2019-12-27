@@ -10,13 +10,13 @@ import android.widget.Toast
 import com.thoughtworks.wear.btconnector.bt.GattServerManager
 import com.thoughtworks.wear.btconnector.utils.BTConstants
 import com.thoughtworks.wear.btconnector.utils.RIGHT
-import io.github.boopited.droidbt.SlaveManager
+import io.github.boopited.droidbt.PeripheralManager
 import io.github.boopited.droidbt.common.BluetoothUtils
 import io.github.boopited.droidbt.common.BluetoothUtils.REQUEST_ENABLE_BT
 
 class MainActivity : WearableActivity() {
 
-    private var slaveManager: SlaveManager? = null
+    private var peripheralManager: PeripheralManager? = null
     private var gattServer: GattServerManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +43,8 @@ class MainActivity : WearableActivity() {
     }
 
     private fun makeDeviceVisible() {
-        slaveManager = SlaveManager(this, BTConstants.SERVICE_GESTURE)
-        slaveManager?.start()
+        peripheralManager = PeripheralManager(this, BTConstants.SERVICE_GESTURE)
+        peripheralManager?.start()
         gattServer = GattServerManager(this)
         gattServer?.start()
         findViewById<View>(R.id.gesture_detector).setOnClickListener {
@@ -83,7 +83,7 @@ class MainActivity : WearableActivity() {
 
     override fun onDestroy() {
         gattServer?.stop()
-        slaveManager?.stop()
+        peripheralManager?.stop()
         super.onDestroy()
     }
 }
