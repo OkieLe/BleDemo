@@ -1,5 +1,6 @@
 package com.thoughtworks.wear.btconnector.bt
 
+import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.util.Log
 import android.os.Bundle
@@ -8,12 +9,14 @@ import com.thoughtworks.wear.btconnector.utils.BTConstants.createChatService
 import com.thoughtworks.wear.btconnector.utils.BTConstants.wrapMessage
 import com.thoughtworks.wear.btconnector.utils.Gesture
 import com.thoughtworks.wear.btconnector.utils.UNKNOWN
+import io.github.boopited.droidbt.PeripheralManager
 import io.github.boopited.droidbt.common.BaseManager
 import io.github.boopited.droidbt.gatt.GattServer
 import java.util.*
 
 class GattServerManager(context: Context): BaseManager(context), GattServer.GattServerCallback {
 
+    private var peripheralManager: PeripheralManager? = null
     private var bluetoothGattServer: GattServer = GattServer(context, this)
 
     private val pendingMessage = mutableListOf<Gesture>()
@@ -21,6 +24,18 @@ class GattServerManager(context: Context): BaseManager(context), GattServer.Gatt
     override fun onBluetoothEnabled(enable: Boolean) {
         if (!enable) {
             bluetoothGattServer.shutdown()
+        }
+    }
+
+    override fun onDeviceConnected(device: BluetoothDevice) {
+        if (peripheralManager?.isAdvertising() == true) {
+            peripheralManager?.stop()
+        }
+    }
+
+    override fun onDeviceDisconnected(device: BluetoothDevice) {
+        if (peripheralManager?.isAdvertising() != true) {
+            peripheralManager?.start()
         }
     }
 
@@ -56,6 +71,8 @@ class GattServerManager(context: Context): BaseManager(context), GattServer.Gatt
 
     override fun start() {
         super.start()
+        peripheralManager = PeripheralManager(context, BTConstants.SERVICE_GESTURE)
+        peripheralManager?.start()
         if (bluetoothAdapter.isEnabled) {
             bluetoothGattServer.startService(createChatService())
         }
@@ -66,6 +83,7 @@ class GattServerManager(context: Context): BaseManager(context), GattServer.Gatt
             bluetoothGattServer.stopService(BTConstants.SERVICE_GESTURE)
         }
         bluetoothGattServer.shutdown()
+        peripheralManager?.stop()
         super.stop()
     }
 

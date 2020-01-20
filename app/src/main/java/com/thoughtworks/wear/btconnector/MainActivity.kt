@@ -16,7 +16,6 @@ import io.github.boopited.droidbt.common.BluetoothUtils.REQUEST_ENABLE_BT
 
 class MainActivity : WearableActivity() {
 
-    private var peripheralManager: PeripheralManager? = null
     private var gattServer: GattServerManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +42,6 @@ class MainActivity : WearableActivity() {
     }
 
     private fun makeDeviceVisible() {
-        peripheralManager = PeripheralManager(this, BTConstants.SERVICE_GESTURE)
-        peripheralManager?.start()
         gattServer = GattServerManager(this)
         gattServer?.start()
         findViewById<View>(R.id.gesture_detector).setOnClickListener {
@@ -83,7 +80,6 @@ class MainActivity : WearableActivity() {
 
     override fun onDestroy() {
         gattServer?.stop()
-        peripheralManager?.stop()
         super.onDestroy()
     }
 }
