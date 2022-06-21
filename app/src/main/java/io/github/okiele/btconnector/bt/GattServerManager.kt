@@ -17,7 +17,7 @@ import java.util.*
 class GattServerManager(context: Context): BaseManager(context), GattServer.GattServerCallback {
 
     private var peripheralManager: PeripheralManager? = null
-    private var bluetoothGattServer: GattServer = GattServer(context, this)
+    private var bluetoothGattServer: GattServer = GattServer(context, this).apply { logEnabled = true }
 
     private val pendingMessage = mutableListOf<Gesture>()
 
@@ -72,6 +72,7 @@ class GattServerManager(context: Context): BaseManager(context), GattServer.Gatt
     override fun start() {
         super.start()
         peripheralManager = PeripheralManager(context, BTConstants.SERVICE_GESTURE)
+        peripheralManager?.logEnabled = true
         peripheralManager?.start()
         if (bluetoothAdapter.isEnabled) {
             bluetoothGattServer.startService(createChatService())
