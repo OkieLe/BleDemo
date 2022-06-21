@@ -1,4 +1,4 @@
-package com.thoughtworks.wear.btconnector.utils
+package io.github.okiele.btconnector.utils
 
 import androidx.annotation.IntDef
 

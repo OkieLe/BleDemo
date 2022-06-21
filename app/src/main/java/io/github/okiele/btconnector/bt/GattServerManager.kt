@@ -1,14 +1,14 @@
-package com.thoughtworks.wear.btconnector.bt
+package io.github.okiele.btconnector.bt
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.util.Log
 import android.os.Bundle
-import com.thoughtworks.wear.btconnector.utils.BTConstants
-import com.thoughtworks.wear.btconnector.utils.BTConstants.createChatService
-import com.thoughtworks.wear.btconnector.utils.BTConstants.wrapMessage
-import com.thoughtworks.wear.btconnector.utils.Gesture
-import com.thoughtworks.wear.btconnector.utils.UNKNOWN
+import io.github.okiele.btconnector.utils.BTConstants
+import io.github.okiele.btconnector.utils.BTConstants.createChatService
+import io.github.okiele.btconnector.utils.BTConstants.wrapMessage
+import io.github.okiele.btconnector.utils.Gesture
+import io.github.okiele.btconnector.utils.UNKNOWN
 import io.github.boopited.droidbt.PeripheralManager
 import io.github.boopited.droidbt.common.BaseManager
 import io.github.boopited.droidbt.gatt.GattServer
