@@ -22,6 +22,7 @@ class GattServerManager(context: Context): BaseManager(context), GattServer.Gatt
     private val pendingMessage = mutableListOf<Gesture>()
 
     override fun onBluetoothEnabled(enable: Boolean) {
+        super.onBluetoothEnabled(enable)
         if (!enable) {
             bluetoothGattServer.shutdown()
         }
