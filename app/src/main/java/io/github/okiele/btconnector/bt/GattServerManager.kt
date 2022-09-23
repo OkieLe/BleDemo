@@ -72,7 +72,8 @@ class GattServerManager(context: Context): BaseManager(context), GattServer.Gatt
 
     override fun start() {
         super.start()
-        peripheralManager = PeripheralManager(context, BTConstants.SERVICE_GESTURE)
+        peripheralManager = PeripheralManager(context, mapOf(
+            BTConstants.SERVICE_GESTURE.toString() to "".toByteArray())
         peripheralManager?.logEnabled = true
         peripheralManager?.start()
         if (bluetoothAdapter.isEnabled) {
