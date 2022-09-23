@@ -72,10 +72,12 @@ class GattServerManager(context: Context): BaseManager(context), GattServer.Gatt
 
     override fun start() {
         super.start()
-        peripheralManager = PeripheralManager(context, mapOf(
-            BTConstants.SERVICE_GESTURE.toString() to "".toByteArray())
-        peripheralManager?.logEnabled = true
-        peripheralManager?.start()
+        peripheralManager = PeripheralManager(context,
+            mapOf(BTConstants.SERVICE_GESTURE.toString() to "".toByteArray())
+        ).apply {
+            logEnabled = true
+            start()
+        }
         if (bluetoothAdapter.isEnabled) {
             bluetoothGattServer.startService(createChatService())
         }
